@@ -16,6 +16,7 @@ function saveTasks() {
 }
 
 // Display tasks
+// Display tasks
 function renderTasks() {
     taskList.innerHTML = "";
 
@@ -29,37 +30,62 @@ function renderTasks() {
         filteredTasks = tasks.filter(task => task.completed);
     }
 
-    if (filteredTasks.length === 0) {
-        emptyMessage.style.display = "block";
-    } else {
-        emptyMessage.style.display = "none";
-    }
+    emptyMessage.style.display =
+        filteredTasks.length === 0 ? "block" : "none";
 
     filteredTasks.forEach(task => {
-
+        // Create task item
         const li = document.createElement("li");
         li.className = "task-item";
         li.dataset.id = task.id;
 
-        li.innerHTML = `
-            <div class="task-content">
-                <input 
-                    type="checkbox" 
-                    class="complete-checkbox"
-                    ${task.completed ? "checked" : ""}
-                >
+        // Create task content
+        const taskContent = document.createElement("div");
+        taskContent.className = "task-content";
 
-                <span class="task-text ${task.completed ? "completed" : ""}">
-                    ${task.text}
-                </span>
-            </div>
+        // Create checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "complete-checkbox";
+        checkbox.checked = task.completed;
 
-            <div class="task-actions">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
-            </div>
-        `;
+        // Create task text
+        const taskText = document.createElement("span");
+        taskText.className = "task-text";
 
+        if (task.completed) {
+            taskText.classList.add("completed");
+        }
+
+        taskText.textContent = task.text;
+
+        // Add checkbox and text
+        taskContent.appendChild(checkbox);
+        taskContent.appendChild(taskText);
+
+        // Create action buttons container
+        const taskActions = document.createElement("div");
+        taskActions.className = "task-actions";
+
+        // Create Edit button
+        const editButton = document.createElement("button");
+        editButton.className = "edit-btn";
+        editButton.textContent = "Edit";
+
+        // Create Delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-btn";
+        deleteButton.textContent = "Delete";
+
+        // Add buttons
+        taskActions.appendChild(editButton);
+        taskActions.appendChild(deleteButton);
+
+        // Add everything to task item
+        li.appendChild(taskContent);
+        li.appendChild(taskActions);
+
+        // Add task item to list
         taskList.appendChild(li);
     });
 }
